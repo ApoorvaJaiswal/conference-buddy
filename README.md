@@ -22,8 +22,8 @@ Roughly 15 minutes per section, plus 10 for intro and 10 to close.
 **GitHub Codespaces (recommended for the workshop).** Click the badge above.
 GitHub asks for your API key on the create screen — it becomes a Codespace secret,
 so the notebook never prompts. Dependencies and the dataset are installed during
-container creation. Open `conference_buddy.ipynb`, pick the kernel
-*Conference Buddy (Python 3.11)*, run the cells.
+container creation. Open `conference_buddy.ipynb` and run the cells — the kernel is
+selected automatically.
 
 Attendees who leave the key blank aren't stuck; the notebook falls back to a
 `getpass` prompt.
@@ -50,7 +50,9 @@ Any provider works — set `BUDDY_MODEL` in `.env`:
 ## Repo layout
 
 ```
-.devcontainer/            Codespaces config: image, secrets, extensions, setup
+.devcontainer/            Codespaces: image, secrets, extensions
+  on-create.sh              slow setup — baked into prebuilds
+  post-create.sh            fast per-codespace checks
 conference_buddy.ipynb    the workshop
 buddy/data.py             dataset access (imported, not taught)
 buddy/nb.py               display helpers: run(), show_workspace(), show_todos()
@@ -85,6 +87,17 @@ a format that may have changed, so verify before relying on it.
 **Clear the outputs before you ship it.**
 `jupyter nbconvert --clear-output --inplace conference_buddy.ipynb`
 Attendees should watch their own agent think, not read yours.
+
+**If a codespace opens without Python or Jupyter,** the container was built
+before `.devcontainer/` reached the repo. Extensions, dependencies and settings
+are applied only at container creation. Fix with Command Palette → *Codespaces:
+Rebuild Container*, or just delete and recreate. The welcome banner in the
+terminal is the tell: no banner means the config never ran.
+
+**Slow setup lives in `onCreateCommand`, not `postCreateCommand`.** Only the
+former is baked into prebuild images; the latter reruns for every codespace even
+when restored from a prebuild. Putting `pip install` in the wrong one makes
+prebuilds pointless. If you add dependencies, add them to `on-create.sh`.
 
 **Turn on prebuilds before the session.** Settings → Codespaces → Prebuild
 configuration, targeting `main` on the 2-core machine type. Without it every

@@ -1,0 +1,13 @@
+README.md
+pyproject.toml
+buddy/__init__.py
+buddy/config.py
+buddy/data.py
+buddy/nb.py
+buddy/run.py
+buddy/tools.py
+wad_conference_buddy.egg-info/PKG-INFO
+wad_conference_buddy.egg-info/SOURCES.txt
+wad_conference_buddy.egg-info/dependency_links.txt
+wad_conference_buddy.egg-info/requires.txt
+wad_conference_buddy.egg-info/top_level.txt
